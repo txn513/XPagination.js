@@ -7,18 +7,28 @@
 </head>
 <body>
 	<div id="xPagination">
-		<div class="xp_container clearFix"></div>
-		<div class="xp_left fLeft">每页条数据&nbsp;共122条数据，共9页。</div>
-		<div class="xp_right fRight">
-			<div class="single_page_btn">首页</div>
-			<div class="single_page_btn"><</div>
-			<div class="single_page_btn">1</div>
-			<div class="single_page_btn">2</div>
-			<div class="single_page_btn">...</div>
-			<div class="single_page_btn">80</div>
-			<div class="single_page_btn">></div>
-			<div class="single_page_btn">尾页</div>
-		</div>
+		<!-- <div class="xp_container clearFix">
+			<div class="xp_left fLeft">每页条数据&nbsp;共122条数据，共9页。</div>
+			<div class="xp_right fRight">
+				<div class="xp_single_page_btn xp_page_home_btn">首页</div>
+				<div class="xp_single_page_btn xp_page_prev_btn">&lt;</div>
+				<div class="xp_single_page_btn xp_page_num_btn">1</div>
+				<div class="xp_single_page_btn xp_page_num_btn">2</div>
+				<div class="xp_single_page_btn xp_page_ellipsis_btn">...</div>
+				<div class="xp_single_page_btn xp_page_num_btn">80</div>
+				<div class="xp_single_page_btn xp_page_next_btn">&gt;</div>
+				<div class="xp_single_page_btn xp_page_lastpage_btn">尾页</div>
+			</div>
+		</div> -->
 	</div>
+
+
+	<script src="./js/XPagination.js"></script>
+	<script type="text/javascript">
+		new xpagination({
+			el: 'xPagination',
+			totalPageNo: 33,
+		});
+	</script>
 </body>
 </html>

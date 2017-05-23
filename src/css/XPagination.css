@@ -13,7 +13,7 @@
 .fRight {
 	float: right;
 }
-.single_page_btn {
+.xp_single_page_btn {
 	height: 28px;
 	line-height: 28px;
 	padding: 0 12px;
@@ -24,15 +24,15 @@
 	cursor: pointer;
 	color: #666a6c; 
 }
-.single_page_btn:first-of-type {
+.xp_single_page_btn:first-of-type {
 	border-left: 1px solid #dddddd;
 	border-top-left-radius: 8px;
 	border-bottom-left-radius: 8px;
 }
-.single_page_btn.current {
+.xp_single_page_btn.current {
 	background: #f5f5f5;
 }
-.single_page_btn:last-of-type {
+.xp_single_page_btn:last-of-type {
 	border-top-right-radius: 8px;
 	border-bottom-right-radius: 8px;
 }
