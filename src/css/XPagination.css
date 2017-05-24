@@ -1,17 +1,38 @@
-.clearFix {
+#xPagination .clearFix {
 	zoom: 1;
 }
-.clearFix:after {
+#xPagination .clearFix:after {
 	content: '';
 	display: block;
 	clear: both;
 	visibility: none;
 }
-.fLeft {
+#xPagination .fLeft {
 	float: left;
 }
-.fRight {
+#xPagination .fRight {
 	float: right;
+}
+#xPagination .xp_left {
+	height: 28px;
+	line-height:28px;
+	margin-right: 100px;
+}
+#xPagination .xp_right {
+	margin-right: 20px;
+}
+#xPagination select {
+	background: transparent;
+   	width: 50px;
+
+   font-size: 16px;
+
+   border: 1px solid #ccc;
+   border-radius: 8px;
+
+   height: 28px;
+   text-align: center;
+	-webkit-appearance: none; /*for chrome*/
 }
 .xp_single_page_btn {
 	height: 28px;
@@ -26,13 +47,178 @@
 }
 .xp_single_page_btn:first-of-type {
 	border-left: 1px solid #dddddd;
-	border-top-left-radius: 8px;
-	border-bottom-left-radius: 8px;
+	border-top-left-radius: 3px;
+	border-bottom-left-radius: 3px;
 }
 .xp_single_page_btn.current {
 	background: #f5f5f5;
 }
+.xp_single_page_btn:hover {
+	background: #f5f5f5;
+}
+.xp_page_ellipsis_btn:hover {
+	background: #fff;
+}
 .xp_single_page_btn:last-of-type {
-	border-top-right-radius: 8px;
-	border-bottom-right-radius: 8px;
+	border-top-right-radius: 3px;
+	border-bottom-right-radius: 3px;
+}
+.xp_redirect_part  {
+	height: 30px;
+	line-height: 30px;
+}
+.xp_redirect_part input {
+	width: 40px;
+	outline: none;
+	border-radius: 3px;
+	border: 1px solid #ddd;
+	height: 26px;
+	text-align: center;
+	vertical-align: bottom;
+	font-size: 15px;
+}
+#xPagination .submit {
+	display: inline-block;
+	height: 30px;
+	width: 66px;
+	line-height: 30px;
+	border-radius: 3px;
+	background-color: #1ab395;
+	color: #fff;
+	text-align: center;
+	margin-left: 10px;
+}
+ul li {
+    list-style: none;
+}
+
+.xselect {
+    position: relative;
+    float: left;
+    width: 40px;
+    height: 26px;
+    padding-left: 11px;
+    font-size: 15px;
+    line-height: 26px;
+    cursor: pointer;
+    border: 1px solid #d2d2d2;
+    border-radius: 3px;
+    margin-right: 10px;
+    margin-left: 10px;
+    outline: none;
+}
+
+.xselect:before {
+    position: absolute;
+    right: 4px;
+    top: 10px;
+    width: 0;
+    height: 0;
+    content: "";
+    border-width: 8px 8px 0 8px;
+    border-style: solid;
+    border-color: #1ab395 transparent;
+    -webkit-transition: transform .25s;
+    -moz-transition: transform .25s;
+    -ms-transition: transform .25s;
+    -o-transition: transform .25s;
+    transition: transform .25s;
+}
+
+.xselect:after {
+    position: absolute;
+    right: 6px;
+    top: 10px;
+    width: 0;
+    height: 0;
+    content: "";
+    border-width: 6px 6px 0 6px;
+    border-style: solid;
+    border-color: #fff transparent;
+    -webkit-transition: all .25s;
+    -moz-transition: all .25s;
+    -ms-transition: all .25s;
+    -o-transition: all .25s;
+    transition: all .25s;
+}
+
+.xselect.active:before {
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+.xselect.active:after {
+    top: 12px;
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+.xselect .dropdown {
+    position: absolute;
+    right: 0;
+    left: 0;
+    display: none;
+    padding: 0;
+    border-radius: inherit;
+    border: 1px solid #d2d2d2;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, .4);
+}
+
+.xselect.active .dropdown {
+    display: block;
+}
+
+.xselect .dropdown:before {
+    position: absolute;
+    right: 13px;
+    bottom: 100%;
+    width: 0;
+    height: 0;
+    content: "";
+    border-width: 0 8px 8px 8px;
+    border-style: solid;
+    border-color: #d2d2d2 transparent;
+}
+
+.xselect .dropdown:after {
+    position: absolute;
+    right: 15px;
+    bottom: 100%;
+    width: 0;
+    height: 0;
+    content: "";
+    border-width: 0 6px 6px 6px;
+    border-style: solid;
+    border-color: #fff transparent;
+}
+
+.xselect .dropdown li {
+    float: left;
+    width: 51px;
+    font-size: 14px;
+    -webkit-transition: all .3s ease-out;
+    -moz-transition: all .3s ease-out;
+    -ms-transition: all .3s ease-out;
+    -o-transition: all .3s ease-out;
+    transition: all .3s ease-out;
+    text-align: center;
+}
+
+.xselect .dropdown li:first-of-type {
+    border-radius: 3px 3px 0 0;
+}
+
+.xselect .dropdown li:last-of-type {
+    border-radius: 0 0 3px 3px;
+}
+
+.xselect .dropdown li:hover {
+    color: #fff;
+    background: #c43c3d;
 }

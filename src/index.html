@@ -7,9 +7,21 @@
 </head>
 <body>
 	<div id="xPagination">
+		
 		<!-- <div class="xp_container clearFix">
-			<div class="xp_left fLeft">每页条数据&nbsp;共122条数据，共9页。</div>
-			<div class="xp_right fRight">
+			<div class="xp_left fLeft">
+				<div class="fLeft">每页</div>
+				<div id="xSelect" class="xselect fLeft">
+		            <span>10</span>
+		            <ul class="dropdown">
+		                <li>20</li>
+		                <li>40</li>
+		                <li>100</li>
+		            </ul>
+		        </div>
+				<div class="fLeft">条数据&nbsp;共<span class="total_record">3333</span>条数据，共<span class="total_page">232</span>页。</div>
+			</div>
+			<div class="xp_right fLeft">
 				<div class="xp_single_page_btn xp_page_home_btn">首页</div>
 				<div class="xp_single_page_btn xp_page_prev_btn">&lt;</div>
 				<div class="xp_single_page_btn xp_page_num_btn">1</div>
@@ -18,17 +30,24 @@
 				<div class="xp_single_page_btn xp_page_num_btn">80</div>
 				<div class="xp_single_page_btn xp_page_next_btn">&gt;</div>
 				<div class="xp_single_page_btn xp_page_lastpage_btn">尾页</div>
+
 			</div>
-		</div> -->
+			<div class="xp_redirect_part fLeft">到<input type="text">页<span class="submit">确定</span></div>
+		</div> 
+	 -->
 	</div>
 
 
 	<script src="./js/XPagination.js"></script>
 	<script type="text/javascript">
-		new xpagination({
+		var xp = new xpagination({
 			el: 'xPagination',
-			totalPageNo: 33,
+			fontShowNo: 2,
 		});
+
+		xp.update(3,11,function(curPage,numPerPage){
+		 		console.log(curPage+"-"+numPerPage)
+		 	});
 	</script>
 </body>
 </html>
