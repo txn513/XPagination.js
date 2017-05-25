@@ -43,11 +43,10 @@
 		var xp = new xpagination({
 			el: 'xPagination',
 			fontShowNo: 2,
+			numPerPage: [12,24,36,48],
 		});
 
-		xp.update(3,11,function(curPage,numPerPage){
-		 		console.log(curPage+"-"+numPerPage)
-		 	});
+		xp.update(3,11);
 	</script>
 </body>
 </html>

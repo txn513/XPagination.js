@@ -1,33 +1,64 @@
+/*
+* XPagination - a JS dropdown plugin.
+* @author Lance Tian <xtian513@gmail.com>
+* @Created 2017-05-24
+* @Last-Modified 2017-05-25
+* @version 1.1
+*
+* @param {Object} params - 传入参数集合
+* @param {String} params.el - 下拉框id
+* @param {String} params.fontShowNo - 显示分页页码数量
+* @param {Array} params.numPerPage - 传入单页显示数量 eg.[10,20,40,100]
+* @param {xp~callback} params.callback - 请求回调
+* @returns {Object} - xp构造函数
+*
+*/
+
+
 window.xpagination = (function(){
+
+	/*
+	* @constructor
+	*/
 	var xp = function(params){
-		this.numPerPage = 10;  //默认每页显示数量
+		this.numPerPage = params.numPerPage || [10,20,40,100];  //默认每页显示数量
 		this.el = params.el;   //父级id
+		this.fontShowNo = params.fontShowNo||8;  //显示页码数量
+		this.callback = params.callback || function(){console.log('请传入回调')}; //回掉函数
+
 		this.totalPageNo = 1; //初始默认样式共1页
-		this.fontShowNo = params.fontShowNo||8;  //显示数量
 		//this.endShowNo = params.endShowNo || 2;
 		// this.leftRightNo = 2; //左右显示页数
 		this.curPageNo = 1; //默认当前页为1
-		//this.callback = params.callback; //回掉函数
 		this.totalRecord = 0; //总记录数
 		this.xPaginationWrap = null;   //父级对象
+		this.onOff = true;
+		this.curNumPerPage = this.numPerPage[0]; //默认当前每页页数为数组第一个
+
 		this.init();
 	}
 	xp.prototype = {
 		init: function(){
-			this.xPaginationWrap = document.getElementById(this.el);
+			this.xPaginationWrap = document.getElementById(this.el); //获取父级 
 			this.renderHtml();
-			
-			//this.clickEvent();
-			// this.selectInit();
 		},
-		update: function(totalPageNo,totalRecord,callback){
+		update: function(totalPageNo,totalRecord,onOff){
+
+			
 			this.totalPageNo = totalPageNo;
 			this.totalRecord = totalRecord; 
+			this.onOff = true;
 
-			this.renderHtml();
-			callback(this.curPageNo, this.numPerPage);//callback发送请求
+			this.setPos(this.curPageNo);
+			//this.renderHtml();
+			
 		},
 		renderHtml: function(){
+			if(this.onOff){
+				this.onOff = false;
+				this.callback(this.curPageNo, this.curNumPerPage);//callback发送请求
+			}
+			
 			this.setPos(this.curPageNo);
 		},
 		clickEvent: function(){
@@ -45,19 +76,19 @@ window.xpagination = (function(){
 				numBtns[i].addEventListener('click',function(){
 					_self.curPageNo = this.dataset.pageno;
 					//console.log(_self.fontShowNo);
-					_self.setPos(_self.curPageNo);
-					
+					//_self.setPos(_self.curPageNo);
+					_self.renderHtml();
 				});
 			}
 			//首页按钮点击事件
 			oHomeBtn.addEventListener('click',function(){
 				_self.curPageNo = 1;
-				_self.setPos(_self.curPageNo);
+				_self.renderHtml();
 			});
 			//尾页按钮点击事件
 			oLastBtn.addEventListener('click',function(){
 				_self.curPageNo = _self.totalPageNo;
-				_self.setPos(_self.curPageNo);
+				_self.renderHtml();
 			});
 			//后退按钮点击事件
 			oPrevBtn.addEventListener('click',function(){
@@ -65,7 +96,7 @@ window.xpagination = (function(){
 				if(_self.curPageNo <1){
 					_self.curPageNo = 1;
 				}
-				_self.setPos(_self.curPageNo);
+				_self.renderHtml();
 			});
 			//前进按钮点击事件
 			oNextBtn.addEventListener('click',function(){
@@ -74,7 +105,7 @@ window.xpagination = (function(){
 				if(_self.curPageNo > _self.totalPageNo){
 					_self.curPageNo = _self.totalPageNo;
 				}
-				_self.setPos(_self.curPageNo);
+				_self.renderHtml();
 			});
 			//确定按钮点击事件
 			oSubmit.addEventListener('click',function(e){
@@ -82,7 +113,7 @@ window.xpagination = (function(){
 				var value = parseInt(target.previousElementSibling.value);
 				if(value!=0 &&  value <= _self.totalPageNo){
 					_self.curPageNo = value;
-					_self.setPos(_self.curPageNo);
+					_self.renderHtml();
 				}
 				//console.log(target.previousElementSibling);
 			});
@@ -96,16 +127,19 @@ window.xpagination = (function(){
 			xContainer.className = 'xp_container clearFix';
 
 
+			
+
 			var tempDiv	='<div class="xp_left fLeft">'+
 			'<div class="fLeft">每页</div>'+
 			'<div id="xSelect" class="xselect fLeft">'+
-			'<span>'+ this.numPerPage +'</span>'+
-			'<ul class="dropdown">'+
-			'<li>10</li>'+
-			'<li>20</li>'+
-			'<li>40</li>'+
-			'<li>100</li>'+
-			'</ul>'+
+			'<span>'+ this.curNumPerPage +'</span>'+
+			'<ul class="dropdown">';
+			
+			this.numPerPage.forEach(function(data, i){
+				tempDiv += '<li>'+ data +'</li>'
+			});
+
+			tempDiv += '</ul>'+
 			'</div>'+
 			'<div class="fLeft">条数据&nbsp;共<span class="total_record">'+ 
 			this.totalRecord +
@@ -193,12 +227,12 @@ window.xpagination = (function(){
 
             for(var i=0; i<oLis.length; i++){
                 oLis[i].addEventListener('click', function(){
-                    obj.numPerPage = this.innerHTML;
-                    if(oSpan.innerHTML == obj.numPerPage) return;
-                    oSpan.innerHTML = obj.numPerPage;
+                    obj.curNumPerPage = this.innerHTML;
+                    if(oSpan.innerHTML == obj.curNumPerPage) return;
+                    oSpan.innerHTML = obj.curNumPerPage;
                     obj.removeClass(oSpan.parentNode,'active')
                     obj.curPageNo = 1;  //还原到第一页
-					obj.setPos(obj.curPageNo);
+					obj.renderHtml();
                 });
             }
 		},
