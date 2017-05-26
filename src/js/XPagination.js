@@ -3,17 +3,26 @@
 * @author Lance Tian <xtian513@gmail.com>
 * @Created 2017-05-24
 * @Last-Modified 2017-05-25
-* @version 1.1
+* @version 1.2
 *
 * @param {Object} params - 传入参数集合
 * @param {String} params.el - 下拉框id
 * @param {String} params.fontShowNo - 显示分页页码数量
 * @param {Array} params.numPerPage - 传入单页显示数量 eg.[10,20,40,100]
+* @param {String} params.position - 靠左/靠右
 * @param {xp~callback} params.callback - 请求回调
 * @returns {Object} - xp构造函数
 *
 */
 
+
+/*
+* 增加位置选项-靠左或靠右
+* @version 1.2
+*
+*
+*
+*/
 
 window.xpagination = (function(){
 
@@ -24,7 +33,8 @@ window.xpagination = (function(){
 		this.numPerPage = params.numPerPage || [10,20,40,100];  //默认每页显示数量
 		this.el = params.el;   //父级id
 		this.fontShowNo = params.fontShowNo||8;  //显示页码数量
-		this.callback = params.callback || function(){console.log('请传入回调')}; //回掉函数
+		this.position = params.position || 'left';
+		this.callback = params.callback || function(){console.log('请传入回调')}; //回调函数
 
 		this.totalPageNo = 1; //初始默认样式共1页
 		//this.endShowNo = params.endShowNo || 2;
@@ -42,7 +52,7 @@ window.xpagination = (function(){
 			this.xPaginationWrap = document.getElementById(this.el); //获取父级 
 			this.renderHtml();
 		},
-		update: function(totalPageNo,totalRecord,onOff){
+		update: function(totalPageNo,totalRecord){
 
 			
 			this.totalPageNo = totalPageNo;
@@ -120,26 +130,26 @@ window.xpagination = (function(){
 		},
 		setPos: function(num){
 			var newNum = parseInt(num);
+			var posClass = "fLeft";
 			//var xPaginationWrap = document.getElementById(this.el);
-
+			if(this.position == "right"){
+				posClass = "fRight";
+			}
 
 			var xContainer = document.createElement('div');
 			xContainer.className = 'xp_container clearFix';
 
 
-			
-
-			var tempDiv	='<div class="xp_left fLeft">'+
+			var xpPartOneHtml = '<div class="xp_left '+ posClass +'">'+
 			'<div class="fLeft">每页</div>'+
 			'<div id="xSelect" class="xselect fLeft">'+
 			'<span>'+ this.curNumPerPage +'</span>'+
 			'<ul class="dropdown">';
-			
-			this.numPerPage.forEach(function(data, i){
-				tempDiv += '<li>'+ data +'</li>'
-			});
 
-			tempDiv += '</ul>'+
+			this.numPerPage.forEach(function(data, i){
+				xpPartOneHtml += '<li>'+ data +'</li>'
+			});
+			xpPartOneHtml += '</ul>'+
 			'</div>'+
 			'<div class="fLeft">条数据&nbsp;共<span class="total_record">'+ 
 			this.totalRecord +
@@ -148,19 +158,19 @@ window.xpagination = (function(){
 			'</span>页。</div>'+
 			'</div>';
 
-			tempDiv += '<div class="xp_right fLeft"><div class="xp_single_page_btn xp_page_home_btn">首页</div><div class="xp_single_page_btn xp_page_prev_btn">&lt;</div>';
 
+
+			var mainPartHtml = '<div class="xp_right '+ posClass +'"><div class="xp_single_page_btn xp_page_home_btn">首页</div><div class="xp_single_page_btn xp_page_prev_btn">&lt;</div>';
 
 			function activeClass(index){
 				if((index+1) == newNum){
-					tempDiv += '<div class="xp_single_page_btn xp_page_num_btn current" data-pageno="'+ (i+1) +'">' + (i+1)+'</div>';
+					mainPartHtml += '<div class="xp_single_page_btn xp_page_num_btn current" data-pageno="'+ (i+1) +'">' + (i+1)+'</div>';
 				}
 				else {
-					tempDiv +='<div class="xp_single_page_btn xp_page_num_btn" data-pageno="'+ (i+1) +'">' + (i+1)+'</div>';
+					mainPartHtml +='<div class="xp_single_page_btn xp_page_num_btn" data-pageno="'+ (i+1) +'">' + (i+1)+'</div>';
 				}
 				
 			}
-
 			if(this.fontShowNo+1>this.totalPageNo){
 				for(var i = 0; i<this.totalPageNo; i++){
 					activeClass(i);
@@ -171,34 +181,111 @@ window.xpagination = (function(){
 				var rightNum = this.fontShowNo+1-3-leftNum;
 				if((newNum-leftNum)>1 && (newNum+rightNum)<this.totalPageNo){
 
-					tempDiv +='<div class="xp_single_page_btn xp_page_ellipsis_btn">...</div>';
+					mainPartHtml +='<div class="xp_single_page_btn xp_page_ellipsis_btn">...</div>';
 					for(var i = (newNum-leftNum-1); i<(newNum+rightNum); i++){
 						activeClass(i);
 					}
-					tempDiv +='<div class="xp_single_page_btn xp_page_ellipsis_btn">...</div>';
+					mainPartHtml +='<div class="xp_single_page_btn xp_page_ellipsis_btn">...</div>';
 				}
 				else if((newNum-leftNum) <=1){
 					for(var i = 0; i<this.fontShowNo; i++){
 						activeClass(i);
 					}
-					tempDiv +='<div class="xp_single_page_btn xp_page_ellipsis_btn">...</div>';
+					mainPartHtml +='<div class="xp_single_page_btn xp_page_ellipsis_btn">...</div>';
 				}
 				else if((newNum+rightNum)>=this.totalPageNo){
 
-					tempDiv +='<div class="xp_single_page_btn xp_page_ellipsis_btn">...</div>';
+					mainPartHtml +='<div class="xp_single_page_btn xp_page_ellipsis_btn">...</div>';
 					for(var i = (this.totalPageNo-this.fontShowNo) ; i<this.totalPageNo; i++){
 						activeClass(i);
 					}
 				}
 			}
+
+			mainPartHtml +='<div class="xp_single_page_btn xp_page_next_btn">&gt;</div><div class="xp_single_page_btn xp_page_lastpage_btn">尾页</div></div>';
+
+
+			var xpPartRedirectHtml = '<div class="xp_redirect_part '+ posClass +'">到<input type="text" value="'+ this.curPageNo +'">页<span class="submit">确定</span></div>';
+			//-----------------
+
+			// var tempDiv	='<div class="xp_left fLeft">'+
+			// '<div class="fLeft">每页</div>'+
+			// '<div id="xSelect" class="xselect fLeft">'+
+			// '<span>'+ this.curNumPerPage +'</span>'+
+			// '<ul class="dropdown">';
 			
+			// this.numPerPage.forEach(function(data, i){
+			// 	tempDiv += '<li>'+ data +'</li>'
+			// });
+
+			// tempDiv += '</ul>'+
+			// '</div>'+
+			// '<div class="fLeft">条数据&nbsp;共<span class="total_record">'+ 
+			// this.totalRecord +
+			// '</span>条数据，共<span class="total_page">'+ 
+			// this.totalPageNo +
+			// '</span>页。</div>'+
+			// '</div>';
+
+			// tempDiv += '<div class="xp_right fLeft"><div class="xp_single_page_btn xp_page_home_btn">首页</div><div class="xp_single_page_btn xp_page_prev_btn">&lt;</div>';
+
+
+			// function activeClass(index){
+			// 	if((index+1) == newNum){
+			// 		tempDiv += '<div class="xp_single_page_btn xp_page_num_btn current" data-pageno="'+ (i+1) +'">' + (i+1)+'</div>';
+			// 	}
+			// 	else {
+			// 		tempDiv +='<div class="xp_single_page_btn xp_page_num_btn" data-pageno="'+ (i+1) +'">' + (i+1)+'</div>';
+			// 	}
+				
+			// }
+
+			// if(this.fontShowNo+1>this.totalPageNo){
+			// 	for(var i = 0; i<this.totalPageNo; i++){
+			// 		activeClass(i);
+			// 	}
+			// }
+			// else {
+			// 	var leftNum = Math.ceil((this.fontShowNo+1-3)/2);
+			// 	var rightNum = this.fontShowNo+1-3-leftNum;
+			// 	if((newNum-leftNum)>1 && (newNum+rightNum)<this.totalPageNo){
+
+			// 		tempDiv +='<div class="xp_single_page_btn xp_page_ellipsis_btn">...</div>';
+			// 		for(var i = (newNum-leftNum-1); i<(newNum+rightNum); i++){
+			// 			activeClass(i);
+			// 		}
+			// 		tempDiv +='<div class="xp_single_page_btn xp_page_ellipsis_btn">...</div>';
+			// 	}
+			// 	else if((newNum-leftNum) <=1){
+			// 		for(var i = 0; i<this.fontShowNo; i++){
+			// 			activeClass(i);
+			// 		}
+			// 		tempDiv +='<div class="xp_single_page_btn xp_page_ellipsis_btn">...</div>';
+			// 	}
+			// 	else if((newNum+rightNum)>=this.totalPageNo){
+
+			// 		tempDiv +='<div class="xp_single_page_btn xp_page_ellipsis_btn">...</div>';
+			// 		for(var i = (this.totalPageNo-this.fontShowNo) ; i<this.totalPageNo; i++){
+			// 			activeClass(i);
+			// 		}
+			// 	}
+			// }
 			
-			//console.log(num);
 
 			
 
 			
-			tempDiv +='<div class="xp_single_page_btn xp_page_next_btn">&gt;</div><div class="xp_single_page_btn xp_page_lastpage_btn">尾页</div></div><div class="xp_redirect_part fLeft">到<input type="text">页<span class="submit">确定</span></div>';
+			// tempDiv +='<div class="xp_single_page_btn xp_page_next_btn">&gt;</div><div class="xp_single_page_btn xp_page_lastpage_btn">尾页</div></div><div class="xp_redirect_part fLeft">到<input type="text">页<span class="submit">确定</span></div>';
+			var tempDiv = '';
+			if(this.position == "right"){
+				tempDiv = xpPartRedirectHtml+mainPartHtml+xpPartOneHtml;
+			}
+			else if(this.position == "left"){
+				tempDiv = xpPartOneHtml+mainPartHtml+xpPartRedirectHtml;
+			}
+			
+
+
 			xContainer.innerHTML = tempDiv;
 			this.xPaginationWrap.innerHTML = '';
 			this.xPaginationWrap.appendChild(xContainer);
