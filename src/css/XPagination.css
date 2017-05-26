@@ -87,6 +87,7 @@
 	color: #fff;
 	text-align: center;
 	margin-left: 10px;
+    cursor: pointer;
 }
 ul li {
     list-style: none;
@@ -106,7 +107,7 @@ ul li {
     margin-right: 10px;
     margin-left: 10px;
     outline: none;
-    text-align:left;
+    text-align:left; 
 }
 
 .xselect:before {
@@ -221,5 +222,23 @@ ul li {
 
 .xselect .dropdown li:hover {
     color: #fff;
-    background: #c43c3d;
+    background: #1ab395;
+}
+
+
+
+/* theme1 */
+#xPagination .theme1 .submit,
+#xPagination .theme1 .dropdown li:hover,
+#xPagination .theme1 .xp_single_page_btn:hover,
+#xPagination .theme1 .xp_single_page_btn.current {
+    background-color: #e67a31;
+    color: #fff;
+}
+#xPagination .theme1 .xselect:before {
+    border-color: #e67a31 transparent;
+}
+#xPagination .theme1 .xp_page_ellipsis_btn:hover {
+    background-color: #fff;
+    color: #666a6c;
 }

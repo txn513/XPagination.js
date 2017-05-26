@@ -3,24 +3,28 @@
 * @author Lance Tian <xtian513@gmail.com>
 * @Created 2017-05-24
 * @Last-Modified 2017-05-25
-* @version 1.2
+* @version 1.3
 *
 * @param {Object} params - 传入参数集合
 * @param {String} params.el - 下拉框id
 * @param {String} params.fontShowNo - 显示分页页码数量
 * @param {Array} params.numPerPage - 传入单页显示数量 eg.[10,20,40,100]
 * @param {String} params.position - 靠左/靠右
+* @param {Number} params.theme - 主题颜色 0-默认色 1-vi色
 * @param {xp~callback} params.callback - 请求回调
+* @param {Number} params.scrollTo - 传入滚动位置
 * @returns {Object} - xp构造函数
 *
 */
 
 
 /*
+*
+* 增加点击滚动选项
+* @version 1.3
+*
 * 增加位置选项-靠左或靠右
 * @version 1.2
-*
-*
 *
 */
 
@@ -35,6 +39,8 @@ window.xpagination = (function(){
 		this.fontShowNo = params.fontShowNo||8;  //显示页码数量
 		this.position = params.position || 'left';
 		this.callback = params.callback || function(){console.log('请传入回调')}; //回调函数
+		this.theme = params.theme||0;
+		this.scrollTo = params.scrollTo||0;
 
 		this.totalPageNo = 1; //初始默认样式共1页
 		//this.endShowNo = params.endShowNo || 2;
@@ -44,6 +50,8 @@ window.xpagination = (function(){
 		this.xPaginationWrap = null;   //父级对象
 		this.onOff = true;
 		this.curNumPerPage = this.numPerPage[0]; //默认当前每页页数为数组第一个
+		this.totalThemeNo = 2; //总主题数
+		this.inputValue = "";
 
 		this.init();
 	}
@@ -80,10 +88,15 @@ window.xpagination = (function(){
 			var oSubmit = this.xPaginationWrap.querySelector('.submit');
 
 			var _self = this;
-
+			
+			function scrollTo(top){
+				document.getElementsByTagName('body')[0].scrollTop = top;
+			}
+			
 			//数字按钮点击事件
 			for(var i = 0; i<numBtns.length; i++){
 				numBtns[i].addEventListener('click',function(){
+					scrollTo(_self.scrollTo);
 					_self.curPageNo = this.dataset.pageno;
 					//console.log(_self.fontShowNo);
 					//_self.setPos(_self.curPageNo);
@@ -92,16 +105,19 @@ window.xpagination = (function(){
 			}
 			//首页按钮点击事件
 			oHomeBtn.addEventListener('click',function(){
+				scrollTo(_self.scrollTo);
 				_self.curPageNo = 1;
 				_self.renderHtml();
 			});
 			//尾页按钮点击事件
 			oLastBtn.addEventListener('click',function(){
+				scrollTo(_self.scrollTo);
 				_self.curPageNo = _self.totalPageNo;
 				_self.renderHtml();
 			});
 			//后退按钮点击事件
 			oPrevBtn.addEventListener('click',function(){
+				scrollTo(_self.scrollTo);
 				_self.curPageNo--;
 				if(_self.curPageNo <1){
 					_self.curPageNo = 1;
@@ -110,6 +126,7 @@ window.xpagination = (function(){
 			});
 			//前进按钮点击事件
 			oNextBtn.addEventListener('click',function(){
+				scrollTo(_self.scrollTo);
 				console.log(_self.curPageNo);
 				_self.curPageNo++;
 				if(_self.curPageNo > _self.totalPageNo){
@@ -119,9 +136,11 @@ window.xpagination = (function(){
 			});
 			//确定按钮点击事件
 			oSubmit.addEventListener('click',function(e){
+				scrollTo(_self.scrollTo);
 				var target  = e.currentTarget;
 				var value = parseInt(target.previousElementSibling.value);
 				if(value!=0 &&  value <= _self.totalPageNo){
+					_self.inputValue = value;
 					_self.curPageNo = value;
 					_self.renderHtml();
 				}
@@ -131,13 +150,19 @@ window.xpagination = (function(){
 		setPos: function(num){
 			var newNum = parseInt(num);
 			var posClass = "fLeft";
+			var themeClass = '';
+			for(var i =0; i<this.totalThemeNo; i++){
+				if(i == this.theme){
+					themeClass = 'theme'+i;
+				}
+			}
 			//var xPaginationWrap = document.getElementById(this.el);
 			if(this.position == "right"){
 				posClass = "fRight";
 			}
 
 			var xContainer = document.createElement('div');
-			xContainer.className = 'xp_container clearFix';
+			xContainer.className = 'xp_container clearFix '+themeClass;
 
 
 			var xpPartOneHtml = '<div class="xp_left '+ posClass +'">'+
@@ -205,77 +230,8 @@ window.xpagination = (function(){
 			mainPartHtml +='<div class="xp_single_page_btn xp_page_next_btn">&gt;</div><div class="xp_single_page_btn xp_page_lastpage_btn">尾页</div></div>';
 
 
-			var xpPartRedirectHtml = '<div class="xp_redirect_part '+ posClass +'">到<input type="text" value="'+ this.curPageNo +'">页<span class="submit">确定</span></div>';
-			//-----------------
-
-			// var tempDiv	='<div class="xp_left fLeft">'+
-			// '<div class="fLeft">每页</div>'+
-			// '<div id="xSelect" class="xselect fLeft">'+
-			// '<span>'+ this.curNumPerPage +'</span>'+
-			// '<ul class="dropdown">';
+			var xpPartRedirectHtml = '<div class="xp_redirect_part '+ posClass +'">到<input type="text" value="'+ this.inputValue +'">页<span class="submit">确定</span></div>';
 			
-			// this.numPerPage.forEach(function(data, i){
-			// 	tempDiv += '<li>'+ data +'</li>'
-			// });
-
-			// tempDiv += '</ul>'+
-			// '</div>'+
-			// '<div class="fLeft">条数据&nbsp;共<span class="total_record">'+ 
-			// this.totalRecord +
-			// '</span>条数据，共<span class="total_page">'+ 
-			// this.totalPageNo +
-			// '</span>页。</div>'+
-			// '</div>';
-
-			// tempDiv += '<div class="xp_right fLeft"><div class="xp_single_page_btn xp_page_home_btn">首页</div><div class="xp_single_page_btn xp_page_prev_btn">&lt;</div>';
-
-
-			// function activeClass(index){
-			// 	if((index+1) == newNum){
-			// 		tempDiv += '<div class="xp_single_page_btn xp_page_num_btn current" data-pageno="'+ (i+1) +'">' + (i+1)+'</div>';
-			// 	}
-			// 	else {
-			// 		tempDiv +='<div class="xp_single_page_btn xp_page_num_btn" data-pageno="'+ (i+1) +'">' + (i+1)+'</div>';
-			// 	}
-				
-			// }
-
-			// if(this.fontShowNo+1>this.totalPageNo){
-			// 	for(var i = 0; i<this.totalPageNo; i++){
-			// 		activeClass(i);
-			// 	}
-			// }
-			// else {
-			// 	var leftNum = Math.ceil((this.fontShowNo+1-3)/2);
-			// 	var rightNum = this.fontShowNo+1-3-leftNum;
-			// 	if((newNum-leftNum)>1 && (newNum+rightNum)<this.totalPageNo){
-
-			// 		tempDiv +='<div class="xp_single_page_btn xp_page_ellipsis_btn">...</div>';
-			// 		for(var i = (newNum-leftNum-1); i<(newNum+rightNum); i++){
-			// 			activeClass(i);
-			// 		}
-			// 		tempDiv +='<div class="xp_single_page_btn xp_page_ellipsis_btn">...</div>';
-			// 	}
-			// 	else if((newNum-leftNum) <=1){
-			// 		for(var i = 0; i<this.fontShowNo; i++){
-			// 			activeClass(i);
-			// 		}
-			// 		tempDiv +='<div class="xp_single_page_btn xp_page_ellipsis_btn">...</div>';
-			// 	}
-			// 	else if((newNum+rightNum)>=this.totalPageNo){
-
-			// 		tempDiv +='<div class="xp_single_page_btn xp_page_ellipsis_btn">...</div>';
-			// 		for(var i = (this.totalPageNo-this.fontShowNo) ; i<this.totalPageNo; i++){
-			// 			activeClass(i);
-			// 		}
-			// 	}
-			// }
-			
-
-			
-
-			
-			// tempDiv +='<div class="xp_single_page_btn xp_page_next_btn">&gt;</div><div class="xp_single_page_btn xp_page_lastpage_btn">尾页</div></div><div class="xp_redirect_part fLeft">到<input type="text">页<span class="submit">确定</span></div>';
 			var tempDiv = '';
 			if(this.position == "right"){
 				tempDiv = xpPartRedirectHtml+mainPartHtml+xpPartOneHtml;
