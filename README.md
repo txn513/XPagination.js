@@ -37,7 +37,7 @@ var pagination  = new XPagination({
 	position: 'right',				//{String} - 左浮动或有浮动, 默认值'left'
 	theme: 1,					//{Number} - 主题，默认值0
 	scrollTo: 600,					//{Number} - 点击分页跳转后滚动至某位置，默认值0
-	callback: function(curPageNo, curNumPerPage){},	//{Function} - 回调函数请求数据包含两个参数:@curPageNo 当前页数, 									//@curNumPerPage 当前每页显示数
+	callback: function(curPageNo, curNumPerPage){},	//{Function} - 回调函数请求数据包含两个参数 curPageNo-当前页数,curNumPerPage-当前每页显示数
 
 });
 ..
