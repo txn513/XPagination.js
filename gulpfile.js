@@ -36,4 +36,4 @@ gulp.task('watch', function () {
   gulp.watch('./src/sass/*.scss', ['sass']);  //监听scss
 });
 
-gulp.task('default',['min-js','sass']);
+gulp.task('default',['min-js','min-css']);
