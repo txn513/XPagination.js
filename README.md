@@ -4,6 +4,7 @@ XPagination.js
 纯原生js轻量级分页控件
 
 ##用法
+
 在html页面中想要添加分页的位置创建div并添加id属性，如下
 
 ```
