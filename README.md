@@ -45,4 +45,4 @@ var pagination  = new XPagination({
 
 ## API
 
-upadate(totalPageNo,totalRecord)     更新总页数和总数据数量
+`upadate(totalPageNo,totalRecord)`     更新总页数和总数据数量
