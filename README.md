@@ -13,7 +13,7 @@ XPagination.js
 ...
 ```
 
-引入样css文件到页面中：
+引入css样式文件到页面中：
 ```
 ...
 <link rel="stylesheet" href="XPagination.css">
@@ -33,11 +33,11 @@ XPagination.js
 var pagination  = new XPagination({
 	el: 'xPagination', 				//{String} - 外层id
 	fontShowNo: 2,					//{Number} - 显示分页数字按钮数量，默认值8
-	numPerPage: [12,24,36,48],			//{Array} - 没显示数量选项，默认值[10,20,40,100]
-	position: 'right',				//{String} - 左浮动或有浮动, 默认值'left'
+	numPerPage: [12,24,36,48],			//{Array} - 每页显示条数选项，默认值[10,20,40,100]
+	position: 'right',				//{String} - 左浮动或右浮动, 默认值'left'
 	theme: 1,					//{Number} - 主题，默认值0
 	scrollTo: 600,					//{Number} - 点击分页跳转后滚动至某位置，默认值0
-	callback: function(curPageNo, curNumPerPage){},	//{Function} - 回调函数请求数据包含两个参数 curPageNo-当前页数,curNumPerPage-当前每页显示数
+	callback: function(curPageNo, curNumPerPage){},	//{Function} - 回调函数请求数据包含两个参数 curPageNo-当前页数,curNumPerPage-当前每页显示条数
 
 });
 ..
