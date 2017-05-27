@@ -32,7 +32,7 @@ XPagination.js
 ...
 var pagination  = new XPagination({
 	el: 'xPagination', 				//{String} - 外层id
-	fontShowNo: 2,					//{Number} - 显示分页数字按钮数量
+	fontShowNo: 2,					//{Number} - 显示分页数字按钮数量，默认值8
 	numPerPage: [12,24,36,48],		//{Array} - 没显示数量选项，默认值[10,20,40,100]
 	position: 'right',				//{String} - 左浮动或有浮动, 默认值'left'
 	theme: 1,						//{Number} - 主题，默认值0
@@ -46,4 +46,4 @@ var pagination  = new XPagination({
 
 ## API
 
-upadate(totalPageNo,totalRecord) 更新总页数和总数据数量
+upadate(totalPageNo,totalRecord)     更新总页数和总数据数量
